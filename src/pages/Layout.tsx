@@ -60,14 +60,21 @@ const Layout = () => {
       <Profile>
         {/*todo (1) 프로필 꾸미기*/}
         <div>
-          <ProfilePicture src="" alt="프로필 사진" />
+          <ProfilePicture
+            src="https://r1.community.samsung.com/t5/image/serverpage/image-id/8134397iA49919B76C19A636/image-size/large?v=v2&px=999"
+            alt="프로필 사진"
+          />
         </div>
         <div>
-          <Name>이름</Name>
-          <Description>설명</Description>
+          <Name>라쿤</Name>
+          <Description>😘😘😘😘 즐거운 2024 실전 코딩 😂😂😂😂</Description>
         </div>
       </Profile>
-      <Nav>{/*todo (2) 메뉴 작성*/}</Nav>
+      {/*<Nav>/!*todo (2) 메뉴 작성*!/</Nav>*/}
+      <Nav>
+        <NavLink to="/"> 포스트 </NavLink>
+        <NavLink to="/resume"> 소개 </NavLink>
+      </Nav>
       <Outlet />
     </div>
   );

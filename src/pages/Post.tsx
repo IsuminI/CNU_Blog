@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { deletePostById, getPostById } from '../api';
+import { deletePostById, getPostById, getPostList } from '../api';
 import { IPost } from '../api/types';
 import NotFound from '../components/NotFound';
 import Tag from '../components/Tag';
+import useGetPostById from '../queries/useGetPostById.ts';
+import useDeletePostById from '../queries/useDeletePostById.ts';
 
 const Title = styled.h1`
   font-size: 3rem;
@@ -61,7 +63,77 @@ const Text = styled.p`
 
 const Post = () => {
   // todo (4) post 컴포넌트 작성
-  return <div style={{ margin: '5.5rem auto', width: '700px' }}></div>;
+  // const navigate = useNavigate();
+  const params = useParams();
+  const { postId = '' } = params;
+  const { data: post, isError, isLoading } = useGetPostById(postId);
+  const { mutate: deletePost } = useDeletePostById();
+
+  // 처음 진입할 때는 아무것도 없으니 null도 추가
+  // const [post, setPost] = useState<IPost | null>(null);
+  console.log(params, postId);
+
+  // const fetchPostById = async (id: string) => {
+  //   const { data } = await getPostById(id);
+  //   setPost(data);
+  // };
+  // const requestDeletePostById = async () => {
+  //   await deletePostById(postId);
+  //   navigate('/');
+  // };
+
+  const clickDeleteButton = () => {
+    const result = window.confirm('🤬🤬🤬🤬정말로 게시글을 삭제하시겠습니까????????????!!!!!');
+    if (result) {
+      // requestDeletePostById();
+      deletePost({ postId });
+    }
+  };
+
+  if (isLoading) {
+    return <div>...불러오는 중...</div>;
+  }
+
+  // useEffect(() => {
+  //   if (postId) {
+  //     fetchPostById(postId);
+  //   }
+  // }, []);
+
+  if (!post || isError) {
+    return <NotFound />;
+  }
+
+  return (
+    <div style={{ margin: '5.5rem auto', width: '700px' }}>
+      <div>
+        <Title>{post?.title}</Title>
+        <Toolbar>
+          <Info>
+            <div>n분전</div>
+          </Info>
+          <div>
+            {/*todo 수정/삭제 버튼 작성*/}
+            <Link to="/write" state={{ postId }}>
+              <TextButton style={{ marginRight: 10 }}>수정</TextButton>
+            </Link>
+            <TextButton onClick={clickDeleteButton}>삭제</TextButton>
+          </div>
+        </Toolbar>
+        {/* 물음표의 뜻 : 있을수도있고, 없을수도있는데, 있으면 그때 tag의 값을 가져와라 */}
+        {post?.tag && (
+          <TagWrapper>
+            <Tag>#{post.tag}</Tag>
+          </TagWrapper>
+        )}
+      </div>
+      <ContentsArea>
+        {post?.contents?.split('\n').map((text, index) => (
+          <Text key={index}>{text}</Text>
+        ))}
+      </ContentsArea>
+    </div>
+  );
 };
 
 export default Post;

@@ -66,7 +66,7 @@ const Layout = () => {
           />
         </div>
         <div>
-          <Name>라쿤</Name>
+          <Name>이수민</Name>
           <Description>😘😘😘😘 즐거운 2024 실전 코딩 😂😂😂😂</Description>
         </div>
       </Profile>
